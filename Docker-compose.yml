@@ -1,15 +1,15 @@
 version: '3'
 services:
-  setup:
-    container_name : setup
-    build:
-      context : setup
-      dockerfile: Dockerfile
-    volumes:
-      - "certs:/etc/certs"
+  # setup:
+  #   container_name : setup
+  #   build:
+  #     context : setup
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - "certs:/etc/certs"
   prometheus:
-    depends_on: 
-      - setup
+    # depends_on: 
+    #   - setup
     container_name : prometheus_c
     build :
       context : prometheus
