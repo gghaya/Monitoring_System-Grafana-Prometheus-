@@ -1,0 +1,38 @@
+version: '3'
+services:
+  setup:
+    container_name : setup
+    build:
+      context : setup
+      dockerfile: Dockerfile
+    volumes:
+      - "certs:/etc/certs"
+  prometheus:
+    depends_on: 
+      - setup
+    container_name : prometheus_c
+    build :
+      context : prometheus
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 9090:9090
+    volumes:
+      - "prometheus_data:/prometheus/"
+      - "certs:/etc/certs"
+    env_file:
+      - .env
+
+volumes:
+  prometheus_data:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '${PWD}/prometheus_data/'
+  certs:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '${PWD}/certs/'
