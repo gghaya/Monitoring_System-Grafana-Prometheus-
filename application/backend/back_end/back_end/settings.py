@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'chat',
     'friend',
     'rest_framework_simplejwt',
+    'django_prometheus',
     'channels_redis',
     'double_game',#needed
     'channels',
@@ -65,6 +66,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -74,6 +76,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "allauth.account.middleware.AccountMiddleware",
+    'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
 
 ROOT_URLCONF = 'back_end.urls'
@@ -115,7 +118,7 @@ WSGI_APPLICATION = 'back_end.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django_prometheus.db.backends.postgresql',
         'NAME': 'transc_db',           # Name of the database
         'USER': 'postgres',            # Your PostgreSQL username
         'PASSWORD': 'password',    # Your PostgreSQL password

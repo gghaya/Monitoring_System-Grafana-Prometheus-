@@ -2,9 +2,10 @@ FROM debian:10
 WORKDIR /app
 RUN apt-get update && apt-get install -y nginx openssl \
     && rm -rf /var/lib/apt/lists/*
-RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-    -keyout /app/nginx.key -out /app/nginx.crt \
-    -subj "/C=US/ST=State/L=City/O=Organization/OU=Department/CN=10.13.7.8"
+RUN openssl genrsa -out /app/ca.key 2048 && \
+    openssl req -new -x509 -key /app/ca.key -out /app/ca.crt -days 365 -batch && \
+    openssl req -new -nodes -out /app/nginx.csr -newkey rsa:4096 -keyout /app/nginx.key -subj '/CN=nginx' && \
+    openssl x509 -req -in /app/nginx.csr -CA /app/ca.crt -CAkey /app/ca.key -CAcreateserial -out /app/nginx.crt -days 730 -sha256
 COPY default.conf /etc/nginx/nginx.conf
 RUN mkdir -p /var/www/frontend/
 # RUN chown -R nginx:nginx /var/www/frontend

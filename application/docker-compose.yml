@@ -27,40 +27,41 @@ services:
     networks:
       - nat
 
-  frontend:
-    build:
-      context: frontend
-      dockerfile: Dockerfile
-    ports:
-      - 3000:3000
-    volumes:
-      - ./env/.env:/app/frontend/.env
-      - front_v:/app/frontend
-    networks:
-      - nat
+  # frontend:
+  #   build:
+  #     context: frontend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 3000:3000
+  #   volumes:
+  #     - ./env/.env:/app/frontend/.env
+  #     - front_v:/app/frontend
+  #   networks:
+  #     - nat
 
   nginx:
     build:
       context: nginx
       dockerfile: Dockerfile
     volumes:
-      - front_v:/var/www/frontend
+      # - front_v:/var/www/frontend
+      - certs:/app
     ports:
       - 443:443
     networks:
       - nat
     depends_on:
-      - frontend
+      - backend
 
-  admin:
-    image: adminer
-    restart: always
-    depends_on:
-      - db
-    ports:
-      - 8080:8080
-    networks:
-      - nat
+  # admin:
+  #   image: adminer
+  #   restart: always
+  #   depends_on:
+  #     - db
+  #   ports:
+  #     - 8080:8080
+  #   networks:
+  #     - nat
 
   redis:
     image: redis
@@ -69,6 +70,24 @@ services:
       - 6379:6379
     networks:
       - nat
+
+  prometheus:
+    # depends_on: 
+    #   - setup
+    container_name : prometheus_c
+    networks:
+      - nat
+    build :
+      context : ../prometheus
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 9090:9090
+    volumes:
+      - "certs:/etc/prometheus/certs"
+      # - "prometheus_data:/prometheus/"
+    # env_file:
+    #   - .env
 
 networks:
   nat:
@@ -80,16 +99,36 @@ volumes:
       type: none
       device: /Users/${USER}/Desktop/db
       o: bind
-  front_v:
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: '${PWD}/frontend'
+  # front_v:
+  #   driver: local
+  #   driver_opts:
+  #     type: 'none'
+  #     o: 'bind'
+  #     device: '${PWD}/frontend'
   backend_v:
     driver: local
     driver_opts:
       type: 'none'
       o: 'bind'
       device: '${PWD}/backend/back_end'
+  certs:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '${PWD}/certs'
+# volumes:
+  # prometheus_data:
+  #   driver: local
+  #   driver_opts:
+  #     type: 'none'
+  #     o: 'bind'
+  #     device: '${PWD}/prometheus_data/'
+  # certs_v:
+  #   driver: local
+  #   driver_opts:
+  #     type: 'none'
+  #     o: 'bind'
+  #     device: '${PWD}/certs/'
+
 

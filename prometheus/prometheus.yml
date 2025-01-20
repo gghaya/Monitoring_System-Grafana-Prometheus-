@@ -9,12 +9,16 @@ scrape_configs:
   - job_name: 'prometheus'
     static_configs:
       - targets: ['localhost:9090']
-    # tls_config:
-    #   cert_file: /etc/certs/prometheus.crt
-    #   key_file: /etc/certs/prometheus.key
   - job_name: 'django_backend'
     scheme: https
-    metrics_path: '/api/metrics'
+    metrics_path: '/metrics'
+    tls_config:
+      ca_file: '/etc/prometheus/certs/ca.crt'
+      cert_file: "/etc/prometheus/certs/nginx.crt"
+      key_file: "/etc/prometheus/certs/nginx.key"
+      insecure_skip_verify: true
+
     static_configs:
-      - targets: ['localhost']
+      - targets: ['nginx']
+    
 

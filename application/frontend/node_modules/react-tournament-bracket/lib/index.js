@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var Bracket_1 = require("./components/Bracket");
+exports.Bracket = Bracket_1.default;
+var BracketGame_1 = require("./components/BracketGame");
+exports.BracketGame = BracketGame_1.default;
+var BracketGenerator_1 = require("./components/BracketGenerator");
+exports.BracketGenerator = BracketGenerator_1.default;
+var Model = require("./components/model");
+exports.Model = Model;
