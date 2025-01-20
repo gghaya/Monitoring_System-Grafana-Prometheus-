@@ -71,23 +71,23 @@ services:
     networks:
       - nat
 
-  prometheus:
-    # depends_on: 
-    #   - setup
-    container_name : prometheus_c
-    networks:
-      - nat
-    build :
-      context : ../prometheus
-      dockerfile: Dockerfile
-    restart: always
-    ports:
-      - 9090:9090
-    volumes:
-      - "certs:/etc/prometheus/certs"
-      # - "prometheus_data:/prometheus/"
-    # env_file:
-    #   - .env
+  # prometheus:
+  #   # depends_on: 
+  #   #   - setup
+  #   container_name : prometheus_c
+  #   networks:
+  #     - nat
+  #   build :
+  #     context : ../prometheus
+  #     dockerfile: Dockerfile
+  #   restart: always
+  #   ports:
+  #     - 9090:9090
+  #   volumes:
+  #     - "certs:/etc/prometheus/certs"
+  #     # - "prometheus_data:/prometheus/"
+  #   # env_file:
+  #   #   - .env
 
 networks:
   nat:
