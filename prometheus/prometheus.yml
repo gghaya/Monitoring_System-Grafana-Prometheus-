@@ -19,13 +19,13 @@ scrape_configs:
       insecure_skip_verify: true
     static_configs:
       - targets: ['host.docker.internal']
-  - job_name: 'host_metrics'
-    # metrics_path: '/metrics'
+  - job_name: 'nginx_metrics'
+    metrics_path: '/metrics'
     # tls_config:
     #   ca_file: '/etc/prometheus/certs/ca.crt'
       # cert_file: "/etc/prometheus/certs/nginx.crt"
       # key_file: "/etc/prometheus/certs/nginx.key"
       # insecure_skip_verify: true
     static_configs:
-      - targets: ['host.docker.internal:9100']
+      - targets: ['nginx_exporter:9913']
 

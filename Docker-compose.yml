@@ -1,5 +1,11 @@
 version: '3'
 
+networks:
+  internal_net:
+    driver: bridge
+  application_nat:
+    external: true
+
 services:
   # setup:
   #   container_name : setup
@@ -23,6 +29,8 @@ services:
       - "certs:/etc/prometheus/certs"
     env_file:
       - .env
+    networks:
+        - internal_net
   grafana:
     container_name : grafana
     build :
@@ -37,31 +45,47 @@ services:
       - "grafana_data:/var/lib/grafana"
     env_file:
       - .env
-  node_exporter:
-    image: quay.io/prometheus/node-exporter:latest
-    container_name: node_exporter
-    command:
-      - '--path.rootfs=/host'
-    network_mode: host
-    pid: host
-    restart: unless-stopped
-    ports:
-      - 9100:9100
-    volumes:
-      - '/:/host:ro'
+    networks:
+        - internal_net
+  nginx_exporter:
+      container_name: nginx_exporter
+      build:
+        context: exporters
+        dockerfile: Dockerfile.nginxporter
+      networks:
+        - internal_net
+        - application_nat
+      ports:
+        - 9913:9913
+      environment:
+        - NGINX_STATUS='http://nginx/status/format/json'
+
+
+  # node_exporter:
+  #   image: quay.io/prometheus/node-exporter:latest
+  #   container_name: node_exporter
+  #   command:
+  #     - '--path.rootfs=/host'
+  #   network_mode: host
+  #   pid: host
+  #   restart: unless-stopped
+  #   ports:
+  #     - 9100:9100
+  #   volumes:
+  #     - '/:/host:ro'
 volumes:
   prometheus_data:
     driver: local
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: '${PWD}/prometheus_data/'
+      device: '/Users/${USER}/Desktop/prometheus_data/'
   grafana_data:
     driver: local
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: '${PWD}/grafana_data/'
+      device: '/Users/${USER}/Desktop/grafana_data/'
   certs:
     driver: local
     driver_opts:
