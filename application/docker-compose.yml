@@ -27,24 +27,24 @@ services:
     networks:
       - nat
 
-  # frontend:
-  #   build:
-  #     context: frontend
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - 3000:3000
-  #   volumes:
-  #     - ./env/.env:/app/frontend/.env
-  #     - front_v:/app/frontend
-  #   networks:
-  #     - nat
+  frontend:
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - ./env/.env:/app/frontend/.env
+      - front_v:/app/frontend
+    networks:
+      - nat
 
   nginx:
     build:
       context: nginx
       dockerfile: Dockerfile
     volumes:
-      # - front_v:/var/www/frontend
+      - front_v:/var/www/frontend
       - certs:/app
     ports:
       - 443:443
@@ -53,15 +53,15 @@ services:
     depends_on:
       - backend
 
-  # admin:
-  #   image: adminer
-  #   restart: always
-  #   depends_on:
-  #     - db
-  #   ports:
-  #     - 8080:8080
-  #   networks:
-  #     - nat
+  admin:
+    image: adminer
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - 8080:8080
+    networks:
+      - nat
 
   redis:
     image: redis
@@ -99,12 +99,12 @@ volumes:
       type: none
       device: /Users/${USER}/Desktop/db
       o: bind
-  # front_v:
-  #   driver: local
-  #   driver_opts:
-  #     type: 'none'
-  #     o: 'bind'
-  #     device: '${PWD}/frontend'
+  front_v:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '${PWD}/frontend'
   backend_v:
     driver: local
     driver_opts:

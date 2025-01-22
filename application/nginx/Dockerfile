@@ -4,7 +4,7 @@ RUN apt-get update && apt-get install -y nginx openssl \
     && rm -rf /var/lib/apt/lists/*
 RUN openssl genrsa -out /app/ca.key 2048 && \
     openssl req -new -x509 -key /app/ca.key -out /app/ca.crt -days 365 -batch && \
-    openssl req -new -nodes -out /app/nginx.csr -newkey rsa:4096 -keyout /app/nginx.key -subj '/CN=nginx' && \
+    openssl req -new -nodes -out /app/nginx.csr -newkey rsa:4096 -keyout /app/nginx.key -subj '/CN=127.0.0.1' && \
     openssl x509 -req -in /app/nginx.csr -CA /app/ca.crt -CAkey /app/ca.key -CAcreateserial -out /app/nginx.crt -days 730 -sha256
 COPY default.conf /etc/nginx/nginx.conf
 RUN mkdir -p /var/www/frontend/

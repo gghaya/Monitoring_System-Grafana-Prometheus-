@@ -1,4 +1,5 @@
 version: '3'
+
 services:
   # setup:
   #   container_name : setup
@@ -22,7 +23,32 @@ services:
       - "certs:/etc/prometheus/certs"
     env_file:
       - .env
-
+  grafana:
+    container_name : grafana
+    build :
+      context: grafana
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+    ports:
+      - 5000:3000
+    volumes:
+      - "grafana_data:/var/lib/grafana"
+    env_file:
+      - .env
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    container_name: node_exporter
+    command:
+      - '--path.rootfs=/host'
+    network_mode: host
+    pid: host
+    restart: unless-stopped
+    ports:
+      - 9100:9100
+    volumes:
+      - '/:/host:ro'
 volumes:
   prometheus_data:
     driver: local
@@ -30,6 +56,12 @@ volumes:
       type: 'none'
       o: 'bind'
       device: '${PWD}/prometheus_data/'
+  grafana_data:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '${PWD}/grafana_data/'
   certs:
     driver: local
     driver_opts:
