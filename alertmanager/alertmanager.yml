@@ -1,8 +1,8 @@
 global:
   smtp_smarthost: 'smtp.gmail.com:587'   # Adresse du serveur SMTP
-  smtp_from: 'ghzlnghaya@gmail.com'   # Adresse de l'expéditeur
-  smtp_auth_username: 'ghzlnghaya@gmail.com'  # Nom d'utilisateur SMTP
-  smtp_auth_password: 'dxft nbty wxrk cjvz'         # Mot de passe SMTP
+  smtp_from: ${SMTP_FROM}  # Adresse de l'expéditeur
+  smtp_auth_username: ${SMTP_AUTH_USERNAME}  # Nom d'utilisateur SMTP
+  smtp_auth_password: ${SMTP_AUTH_PASSWORD}        # Mot de passe SMTP
   smtp_require_tls: true                          # Activer TLS pour la sécurité
 
 route:
@@ -14,5 +14,5 @@ route:
 receivers:
   - name: "default-email"
     email_configs:
-      - to: "ghayaghizlane2@gmail.com"               # Destinataire
+      - to: ${ALERT_EMAIL_RECEIVER}              # Destinataire
         send_resolved: true                    # Envoyer aussi les alertes résolues
