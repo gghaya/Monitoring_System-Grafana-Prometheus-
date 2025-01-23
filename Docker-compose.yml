@@ -26,7 +26,6 @@ services:
       - 9090:9090
     volumes:
       - "prometheus_data:/prometheus/"
-      - "certs:/etc/prometheus/certs"
     env_file:
       - .env
     networks:
@@ -95,9 +94,3 @@ volumes:
       type: 'none'
       o: 'bind'
       device: '/Users/${USER}/Desktop/grafana_data/'
-  certs:
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: '${PWD}/certs/'

@@ -1,11 +1,22 @@
 groups:
-  - name: nginx-alerts
+  - name: nginx-alert
     rules:
       - alert: HighNginxRequestRate
-        expr: rate(nginx_http_requests_total[1m]) > 2
+        expr: rate(nginx_http_requests_total[1m]) > 50
         for: 1m
         labels:
           severity: warning
         annotations:
           summary: "High request rate detected on Nginx ({{ $labels.instance }})"
           description: "The number of requests per second on Nginx has exceeded 50 requests. Current value: {{ $value }} req/s."
+
+  - name: target_down-alert
+    rules:
+      - alert: TargetDown
+        expr: up == 0
+        for: 2m  # Wait for 2 minutes to confirm the target is down
+        labels:
+          severity: critical
+        annotations:
+          summary: "The target is down!"
+          description: "The target '{{ $labels.instance }}' has been down for more than 2 minutes."
