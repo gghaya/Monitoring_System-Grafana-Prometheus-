@@ -1,0 +1,19 @@
+global:
+  smtp_smarthost: 'smtp.gmail.com:587'   # Adresse du serveur SMTP
+  smtp_from: 'ghzlnghaya@gmail.com'   # Adresse de l'expéditeur
+  smtp_auth_username: 'ghzlnghaya@gmail.com'  # Nom d'utilisateur SMTP
+  smtp_auth_password: 'dxft nbty wxrk cjvz'         # Mot de passe SMTP
+  smtp_require_tls: true                          # Activer TLS pour la sécurité
+
+route:
+  group_by: ['alertname']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+  receiver: "default-email"
+
+receivers:
+  - name: "default-email"
+    email_configs:
+      - to: "ghayaghizlane2@gmail.com"               # Destinataire
+        send_resolved: true                    # Envoyer aussi les alertes résolues

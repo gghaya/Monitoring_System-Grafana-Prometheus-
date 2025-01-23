@@ -59,6 +59,15 @@ services:
         - 9913:9913
       environment:
         - NGINX_STATUS='http://nginx/status/format/json'
+  alert_manager:
+      container_name: alert_manager
+      build:
+        context: alertmanager
+        dockerfile: Dockerfile
+      networks:
+        - internal_net
+      ports:
+        - 9093:9093
 
 
   # node_exporter:

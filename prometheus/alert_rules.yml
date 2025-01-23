@@ -1,0 +1,11 @@
+groups:
+  - name: nginx-alerts
+    rules:
+      - alert: HighNginxRequestRate
+        expr: rate(nginx_http_requests_total[1m]) > 2
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High request rate detected on Nginx ({{ $labels.instance }})"
+          description: "The number of requests per second on Nginx has exceeded 50 requests. Current value: {{ $value }} req/s."
